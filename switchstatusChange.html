@@ -1,0 +1,177 @@
+<html>
+   <head>
+      <title>The JQuery Example</title>
+      <style>
+          .div1 {
+              width:120px;
+              border: 1px solid;
+              margin-left:200px;
+              margin-top:100px;
+          }
+          
+          td{
+              width:30px;              
+          }
+
+      </style>
+      
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+      </script>      
+
+      <script>
+  
+          var rows;
+          var cells;
+          var clickCount=0;
+          var completedFlg = true;
+
+          $(document).ready(function(){
+        	  
+        	  rows = $('#table1 tbody').children().length;
+    	      cells = $('#table1 tr').eq(0).children().length;
+        	 
+
+        	  $('#table1 td').click(function(event){
+        	  
+        	      checkResult();
+        	  
+        	      if(completedFlg) {
+        	      
+        	           $('#steps').text(clickCount + ' completed...');
+        	           $('#steps').css('color', 'Red');
+        	           $('#steps').css('width', '200px');
+        	          return;
+        	      }
+        		  
+        		  clickCount++;
+        		  var td = $(this)[0];
+        		  var tr = $(this).closest('tr')[0];
+
+         		  var thisCellIndex = td.cellIndex;
+        		  var thisRowIndex = tr.rowIndex;
+        		         		 
+        		  var thisText = $(this).text();
+
+        		  // this cell
+                  changeText(thisRowIndex, thisCellIndex);
+        		  // up cell
+        		  changeText(thisRowIndex - 1, thisCellIndex);
+        		  // down cell
+        		  changeText(thisRowIndex + 1, thisCellIndex);
+        		  // left cell
+        		  changeText(thisRowIndex, thisCellIndex - 1);
+        		  // right cell
+        		  changeText(thisRowIndex, thisCellIndex + 1);
+        		  
+        		  $('#steps').text(clickCount);
+        		  
+        		  checkResult();
+        	  
+        	      if(completedFlg) {
+        	      
+        	           $('#steps').text(clickCount + ' completed...');
+        	           $('#steps').css('color', 'Red');
+        	           $('#steps').css('width', '200px');
+        	          return;
+        	      }
+         	  });
+          });
+          
+          // change the text of the cell.
+          function changeText(rowIndex, cellIndex){
+       	  
+        	  if(rowIndex < 0 ||
+        			  rowIndex > rows - 1 ||
+        			  cellIndex < 0 ||
+        			  cellIndex > cells -1) {
+        		  
+        		  return;
+        	  }
+        	  
+        	  var object = $('#table1 tr').eq(rowIndex).children('td').eq(cellIndex);
+        	  
+        	  if(object) {
+        		  
+        		  
+        		 if(object.text() == 'Åú') {
+        			 
+        			 object.text('Å¸');
+        		 } else {
+        			 
+        			 object.text('Åú');
+        		 }
+        	  }
+          };
+          
+          function checkResult() {
+          
+              var tr = $('#table1 tr');
+              
+              var breakFlg = false;
+
+              for(i=0, len=tr.length;i<len;i++) {
+              
+                  var cells = tr.eq(i).children();
+                  
+                  for(j=0, m=cells.length;j<m;j++){
+
+                      if(cells.eq(j).text() == 'Å¸'){
+                      
+                          completedFlg = false;
+                          breakFlg = true;
+                          break;
+                      }
+                  }
+                  
+                  if(breakFlg){
+                      
+                      break;
+                  }
+              }
+              
+              if(!breakFlg) {
+              
+                  completedFlg = true;
+              }
+          
+          };
+      </script>
+
+   </head>
+	
+   <body>
+     <div class="div1">     
+	     <table id='table1'>
+	         <tr>
+	            <td>Åú</td>
+	            <td>Åú</td>
+	            <td>Åú</td>
+	            <td>Åú</td>
+	         </tr>
+	         <tr>
+	            <td>Åú</td>
+	            <td>Å¸</td>
+	            <td>Åú</td>
+	            <td>Åú</td>
+	         </tr>
+	         <tr>
+	            <td>Åú</td>
+	            <td>Åú</td>
+	            <td>Åú</td>
+	            <td>Åú</td>
+	         </tr>         
+	     </table>
+     </div>
+     
+     <div class='div2'>
+         <table>
+             <tr>
+                 <td><p>STEPSÅF</p></td>
+                 <td><p id='steps'></p></td>
+             </tr>
+         </table>
+         
+     </div>
+     
+   </body>
+</html>
